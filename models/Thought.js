@@ -37,7 +37,8 @@ const thoughtSchema = new Schema(
   },
   createdAt: {
     type: Date, 
-    default: Date.now
+    default: Date.now,
+    get: (date) => timeSince(date)
   },
   username: {
     type: String, 
@@ -45,7 +46,8 @@ const thoughtSchema = new Schema(
   },
   reactions: [reactionSchema]
 }, {
-  toJSON: {virtuals: true}
+  timestamps: true,
+  toJSON: {virtuals: true, getters: true}
 })
 
 thoughtSchema.virtual("reactionCount").get(function() {
