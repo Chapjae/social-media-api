@@ -33,7 +33,7 @@ const thoughtSchema = new Schema(
   createdAt: {
     type: Date, 
     default: Date.now,
-    get: (date) => (date) // probably import dayJs and use that, or use my own vanilla JS funtion for date formatting
+    get: (date) => date.toLocaleDateString() // probably import dayJs and use that, or use my own vanilla JS funtion for date formatting
   },
   username: {
     type: String, 

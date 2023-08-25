@@ -29,21 +29,21 @@ module.exports = {
   async createThought (req, res) {
     try {
       const thoughts = await Thought.create(req.body)
+      console.log(thoughts)
       const user = await User.findOneAndUpdate(
-        { _id: req.params.userId } ,
+        { _id: req.params.userId },
         { $addToSet: { thoughts: thoughts._id } },
         { runValidators: true, new: true}
-      );
-      
-      if(!user) {
-        return res.status(404).json({
-          message: "That user doesn't exist. Thought created"
-        })
-      }
-
+        );
+        if(!user) {
+          return res.status(404).json({
+            message: "That user doesn't exist. Thought created"
+          })
+        }
      return res.status(200).json(thoughts);
     } catch (err) {
-     return res.status(500).json(err)
+     console.log(err)
+      return res.status(500).json(err)
     }
   },
 
