@@ -19,8 +19,8 @@ const reactionSchema = new Schema(
       // Might need to figure out getter to format timestamp
       type: Date,
       default: Date.now
-    }
-  })
+    },
+  });
 
 const thoughtSchema = new Schema(
   {
@@ -33,7 +33,7 @@ const thoughtSchema = new Schema(
   createdAt: {
     type: Date, 
     default: Date.now,
-    get: (date) => timeSince(date)
+    get: (date) => (date) // probably import dayJs and use that, or use my own vanilla JS funtion for date formatting
   },
   username: {
     type: String, 
@@ -43,12 +43,12 @@ const thoughtSchema = new Schema(
 }, {
   timestamps: true,
   toJSON: {virtuals: true, getters: true}
-})
+});
 
 thoughtSchema.virtual("reactionCount").get(function() {
   return this.reactions.length
-})
+});
 
-const Thought = model ("thought", thoughtSchema)
+const Thought = model("Thought", thoughtSchema)
 
-module.exports = {Thought, reactionSchema}
+module.exports = Thought

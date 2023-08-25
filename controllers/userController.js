@@ -12,8 +12,8 @@ module.exports = {
 
   async getSingleUser(req, res) {
     try {
-      const user = await User.findOne({ _id: req.params.courseId });
-
+      const user = await User.findOne({ _id: req.params.userId });
+      //need to populate data for one user
       if(!user){
         return res.status(404).json({ message: "No User with that ID" });
       }
@@ -63,25 +63,47 @@ module.exports = {
       await Thought.deleteMany({ _id: { $in: user.thoughts }});
       res.json({ message: "User and Thoughts deleted" });
     } catch (err) {
+      console.log(err)
       res.status(500).json(err);
     }
   },
 
   async addFriend(req, res) {
+    console.log("hello")
     try {
       const user = await User.findOneAndUpdate(
           { _id: req.params.userId },
-          { $addToSet: { friends: req.body } },
+          { $addToSet: { friends: req.params.friendId } },
           { runValidators: true, new: true }
         );
-
+      console.log(user)
       if (!user) {
         return res.status(404).json({ message: "That user doesn't exist"});
       }
-
+      res.status(200).json(user)
 
     } catch (err) {
+      console.log(err)
+      return res.status(500).json({message: "no friends!"})
+    }
+  },
+  
+  async removeFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+          { _id: req.params.userId },
+          { $pull: { friends: req.params.friendId } },
+          { runValidators: true, new: true }
+        );
+  
+      if (!user) {
+        return res.status(404).json({ message: "That user doesn't exist"});
+      }
+      res.status(200).json(user)
 
+    } catch (err) {
+    
+      return res.status(500).json({message: "no friends!"})
     }
   }
 }
